@@ -58,6 +58,14 @@ Data used for training and evaluation.
       }, // this COULD be the INPUT to the model
       {
         "chatgptMessage": {
+          "role": "assitant",
+          "content": "The current weather is 22",
+        },
+        "functions": [{ "SOME_FUNCTION_HERE": {} }],
+        "timeSent": "TIME_HERE"
+      }, // this COULD be the INPUT to the model
+      {
+        "chatgptMessage": {
           "role": "user",
           "content": "Sorry, what is the size in Gainesville?"
         },
