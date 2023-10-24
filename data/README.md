@@ -59,7 +59,7 @@ Data used for training and evaluation.
       {
         "chatgptMessage": {
           "role": "assitant",
-          "content": "The current weather is 22",
+          "content": "The current weather is 22"
         },
         "functions": [{ "SOME_FUNCTION_HERE": {} }],
         "timeSent": "TIME_HERE"
@@ -95,20 +95,202 @@ Data used for training and evaluation.
     ]
   }
 ]
-
 ```
 
 ## Objective for training_data.json
+
 ```json
 [
   {
-    "input": [{}],
-    "target": {}
+    "input": [
+      {
+        "chatgptMessage": {
+          "role": "user",
+          "content": "How are you doing"
+        },
+        "functions": null,
+        "timeSent": "EALIEST_TIME_HERE"
+      }
+    ],
+    "target": {
+      "chatgptMessage": {
+        "role": "assistant",
+        "content": "Doing well, how about you?"
+      },
+      "functions": null,
+      "timeSent": "TIME_HERE"
+    }
   },
   {
-    "input": [{}, {}],
-    "target": {}
+    "input": [
+      {
+        "chatgptMessage": {
+          "role": "user",
+          "content": "What is the weather like in Boston?"
+        },
+        "functions": [{ "SOME_FUNCTION_HERE": {} }],
+        "timeSent": "TIME_HERE"
+      }
+    ],
+    "target": {
+      "chatgptMessage": {
+        "role": "assistant",
+        "content": null,
+        "function_call": {
+          "name": "get_current_weather",
+          "arguments": "{ \"location\": \"Boston, MA\"}"
+        }
+      },
+      "functions": [{ "SOME_FUNCTION_HERE": {} }],
+      "timeSent": "TIME_HERE"
+    }
   },
+  {
+    "input": [
+      {
+        "chatgptMessage": {
+          "role": "user",
+          "content": "How are you doing"
+        },
+        "functions": null,
+        "timeSent": "EALIEST_TIME_HERE"
+      },
+      {
+        "chatgptMessage": {
+          "role": "assistant",
+          "content": "Doing well, how about you?"
+        },
+        "functions": null,
+        "timeSent": "TIME_HERE"
+      },
+      {
+        "chatgptMessage": {
+          "role": "user",
+          "content": "What is the weather like in Boston?"
+        },
+        "functions": [{ "SOME_FUNCTION_HERE": {} }],
+        "timeSent": "TIME_HERE"
+      }
+    ],
+    "target": {
+      "chatgptMessage": {
+        "role": "assistant",
+        "content": null,
+        "function_call": {
+          "name": "get_current_weather",
+          "arguments": "{ \"location\": \"Boston, MA\"}"
+        }
+      },
+      "functions": [{ "SOME_FUNCTION_HERE": {} }],
+      "timeSent": "TIME_HERE"
+    }
+  },
+  {
+    "input": [
+      {
+        "chatgptMessage": {
+          "role": "user",
+          "content": "What is the weather like in Boston?"
+        },
+        "functions": [{ "SOME_FUNCTION_HERE": {} }],
+        "timeSent": "TIME_HERE"
+      },
+      {
+        "chatgptMessage": {
+          "role": "assistant",
+          "content": null,
+          "function_call": {
+            "name": "get_current_weather",
+            "arguments": "{ \"location\": \"Boston, MA\"}"
+          }
+        },
+        "functions": [{ "SOME_FUNCTION_HERE": {} }],
+        "timeSent": "TIME_HERE"
+      },
+      {
+        "chatgptMessage": {
+          "role": "function",
+          "content": "{\"temperature\": \"22\", \"unit\": \"celsius\", \"description\": \"Sunny\"}",
+          "name": "get_current_weather"
+        },
+        "functions": [{ "SOME_FUNCTION_HERE": {} }],
+        "timeSent": "TIME_HERE"
+      }
+    ],
+    "target": {
+      "chatgptMessage": {
+        "role": "assitant",
+        "content": "The current weather is 22"
+      },
+      "functions": [{ "SOME_FUNCTION_HERE": {} }],
+      "timeSent": "TIME_HERE"
+    }
+  },
+  {
+    "input": [
+      {
+        "chatgptMessage": {
+          "role": "user",
+          "content": "Sorry, what is the size in Gainesville?"
+        },
+        "functions": [{ "SOME_DIFFERENT_FUNCTION_HERE": {} }],
+        "timeSent": "TIME_HERE"
+      }
+    ],
+    "target": {
+      "chatgptMessage": {
+        "role": "assistant",
+        "content": null,
+        "function_call": {
+          "name": "get_city_size",
+          "arguments": "{ \"city\": \"Gainesville, FL\"}"
+        }
+      },
+      "functions": [{ "SOME_DIFFERENT_FUNCTION_HERE": {} }],
+      "timeSent": "TIME_HERE"
+    }
+  },
+  {
+    "input": [
+      {
+        "chatgptMessage": {
+          "role": "function",
+          "content": "{\"temperature\": \"22\", \"unit\": \"celsius\", \"description\": \"Sunny\"}",
+          "name": "get_current_weather"
+        },
+        "functions": [{ "SOME_FUNCTION_HERE": {} }],
+        "timeSent": "TIME_HERE"
+      },
+      {
+        "chatgptMessage": {
+          "role": "assitant",
+          "content": "The current weather is 22"
+        },
+        "functions": [{ "SOME_FUNCTION_HERE": {} }],
+        "timeSent": "TIME_HERE"
+      },
+      {
+        "chatgptMessage": {
+          "role": "user",
+          "content": "Sorry, what is the size in Gainesville?"
+        },
+        "functions": [{ "SOME_DIFFERENT_FUNCTION_HERE": {} }],
+        "timeSent": "TIME_HERE"
+      }
+    ],
+    "target": {
+      "chatgptMessage": {
+        "role": "assistant",
+        "content": null,
+        "function_call": {
+          "name": "get_city_size",
+          "arguments": "{ \"city\": \"Gainesville, FL\"}"
+        }
+      },
+      "functions": [{ "SOME_DIFFERENT_FUNCTION_HERE": {} }],
+      "timeSent": "TIME_HERE"
+    }
+  }
 ]
 ```
 
