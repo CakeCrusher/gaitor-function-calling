@@ -1,2 +1,6 @@
+<<<<<<< Updated upstream
 .venv
 .vscode
+=======
+.ipynb-checkpoints/
+>>>>>>> Stashed changes
