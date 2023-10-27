@@ -106,26 +106,6 @@ Data used for training and evaluation.
       {
         "chatgptMessage": {
           "role": "user",
-          "content": "How are you doing"
-        },
-        "functions": null,
-        "timeSent": "EALIEST_TIME_HERE"
-      }
-    ],
-    "target": {
-      "chatgptMessage": {
-        "role": "assistant",
-        "content": "Doing well, how about you?"
-      },
-      "functions": null,
-      "timeSent": "TIME_HERE"
-    }
-  },
-  {
-    "input": [
-      {
-        "chatgptMessage": {
-          "role": "user",
           "content": "What is the weather like in Boston?"
         },
         "functions": [{ "SOME_FUNCTION_HERE": {} }],
