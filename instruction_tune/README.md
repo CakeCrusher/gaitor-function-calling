@@ -81,4 +81,4 @@ If the performance is not satisfactory, adjust instruction-output pairs, reproce
 - [Instruction tune llama 2](https://www.philschmid.de/instruction-tune-llama-2)
 - [Train llama 2 with rlhf](https://www.philschmid.de/instruction-tune-llama-2)
 - [Llama 2 text embeddings](https://medium.com/@liusimao8/using-llama-2-models-for-text-embedding-with-langchain-79183350593d)
-- [Instruction fine-tuning Llama 2 with PEFT’s QLoRa](https://medium.com/@ud.chandra/instruction-fine-tuning-llama-2-with-pefts-qlora-method-d6a801ebb19)
+- [Instruction fine-tuning Llama 2 with PEFT’s QLoRa](https://ukey.co/blog/finetune-llama-2-peft-qlora-huggingface/)
