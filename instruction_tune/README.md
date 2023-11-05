@@ -97,3 +97,6 @@ If the performance is not satisfactory, adjust instruction-output pairs, reproce
     - A single A100 might be sufficient to fine tune Llama 2 7B
 - [Llama 2 text embeddings](https://medium.com/@liusimao8/using-llama-2-models-for-text-embedding-with-langchain-79183350593d)
 - [Instruction fine-tuning Llama 2 with PEFT’s QLoRa](https://ukey.co/blog/finetune-llama-2-peft-qlora-huggingface/)
+- Prompt template used for instruction tuning is referred to as [Alpaca format](https://github.com/tatsu-lab/stanford_alpaca#data-release)
+- Instuction datasets are basically very similar to question and answer but more generalized to instructions. Ex [Databricks instruction dataset](https://huggingface.co/datasets/databricks/databricks-dolly-15k)
+
