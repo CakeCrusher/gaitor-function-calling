@@ -30,3 +30,9 @@ This heuristic captures the essence of the custom metric, combining structural c
 
 ## Data
 The current evaluation dataset is limited to only function calling outputs.
+
+- look into how SBERT is represented in academic research
+- sbert to compare json strings
+- begin getting evaluation scores
+- execution accuracy and string metrics
+- 
