@@ -1,5 +1,5 @@
-# instruction_tune
-Instruction-tune Llama 2 for function-calling.
+# fine_tune
+fine-tune Llama 2 for function-calling.
 
 ### Step 1: Create JSON-Formatted Instruction-Output Pairs
 Synthetically generate pairs (10000) of instructions and the desired output in JSON format.

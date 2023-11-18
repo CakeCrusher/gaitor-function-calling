@@ -1,6 +1,8 @@
 .venv
 .vscode
-.ipynb-checkpoints/
+*/.ipynb_checkpoints/*
+*/wandb/*
+
 /llama-7-int4-fc/*
 production_data.json
 production_conversations.json
