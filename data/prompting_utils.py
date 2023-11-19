@@ -75,3 +75,34 @@ def parse_prompt_back_to_data(prompt, instruction):
             data["target"]["chatgptMessage"]["content"] = target_content
 
     return data
+
+def build_prompt(instance, instruction = None):
+    """
+    Function to dynamically build a prompt based on the given instance, using a dictionary of function calling tokens.
+    
+    :param instance: A dictionary representing a single instance of the data.
+    :param function_calling_tokens: A dictionary containing the start and end tokens for different function call elements.
+    :return: A string representing the constructed prompt.
+    """
+    input_message = instance['input'][0]['chatgptMessage']['content']
+    target_message = instance['target']['chatgptMessage']
+    functions = instance['input'][0]['functions']
+
+    # Extracting function details as is
+    functions_str = json.dumps(functions)
+
+    # Building the prompt using the tokens from function_calling_tokens
+    if instruction:
+        system_message = f"<<SYS>>\n{instruction}\n{function_calling_tokens['FUNCTIONS']['start']}{functions_str}{function_calling_tokens['FUNCTIONS']['end']}\n<</SYS>>"
+    else:
+        system_message = f"<<SYS>>\n{function_calling_tokens['FUNCTIONS']['start']}{functions_str}{function_calling_tokens['FUNCTIONS']['end']}\n<</SYS>>"
+        
+    if 'function_call' in target_message:
+        function_call_name = target_message['function_call']['name']
+        function_call_arguments = target_message['function_call']['arguments']
+        prompt = f"<s>[INST] {system_message}\n\n{input_message} [/INST] {function_calling_tokens['FUNCTION_CALL_NAME']['start']}{function_call_name}{function_calling_tokens['FUNCTION_CALL_NAME']['end']}{function_calling_tokens['FUNCTION_CALL_ARGUMENTS']['start']}{function_call_arguments}{function_calling_tokens['FUNCTION_CALL_ARGUMENTS']['end']} </s>"
+    else:
+        target_content = target_message.get('content', '')
+        prompt = f"<s>[INST] {system_message}\n\n{input_message} [/INST] {target_content}</s>"
+
+    return prompt
