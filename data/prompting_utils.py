@@ -1,3 +1,4 @@
+import torch
 import json
 import re
 from gaitor_function_calling.evaluation.evaluation_utils import asd
@@ -61,7 +62,7 @@ def parse_prompt_back_to_data(prompt, instruction):
     }
 
     # Check if the target has a function call
-    if function_calling_tokens['FUNCTION_CALL_NAME']['start'] in prompt:
+    if function_calling_tokens['FUNCTION_CALL_NAME']['start'] in instruction_adjusted_prompt:
         function_call_name = re.search(function_call_name_pattern, instruction_adjusted_prompt).group(1)
         function_call_arguments = re.search(function_call_arguments_pattern, instruction_adjusted_prompt).group(1)
         data["target"]["chatgptMessage"]["function_call"] = {
@@ -75,6 +76,27 @@ def parse_prompt_back_to_data(prompt, instruction):
             data["target"]["chatgptMessage"]["content"] = target_content
 
     return data
+
+def json_arguments_from_prompt(data_text, model, tokenizer, instruction):
+    inp, target = data_text.split("[/INST]")
+    prompt = inp + "[/INST]"
+    input_ids = tokenizer(prompt, return_tensors="pt", truncation=True).input_ids.cuda()
+    outputs = model.generate(input_ids=input_ids, do_sample=True, top_p=0.9, temperature=0.9)
+
+    expected_str = data_text
+    generated_str = tokenizer.batch_decode(outputs.detach().cpu().numpy())[0]
+
+    expected_data = parse_prompt_back_to_data(expected_str, instruction)
+    generated_data = parse_prompt_back_to_data(generated_str, instruction)
+    parse_prompt_back_to_data(generated_str, instruction)
+
+    if "function_call" not in generated_data["target"]["chatgptMessage"]:
+        raise Exception("No function call found in generated data")
+    
+    generated_arguments = json.loads(generated_data["target"]["chatgptMessage"]["function_call"]["arguments"])
+    expected_arguments = json.loads(expected_data["target"]["chatgptMessage"]["function_call"]["arguments"])
+
+    return generated_arguments, expected_arguments
 
 def build_prompt(instance, instruction = None):
     """

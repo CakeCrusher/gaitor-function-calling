@@ -1,8 +1,43 @@
+import json
 import torch
 from transformers import AutoTokenizer, AutoModel
 from scipy.spatial.distance import cosine
 
 asd = "ASD"
+
+def compute_perplexity(logits, labels):
+    """
+    Compute the perplexity of a sequence given its logits and corresponding labels.
+
+    :param logits: Logits from the model. Shape: (batch_size, sequence_length, vocab_size)
+    :param labels: Ground truth labels corresponding to the logits. Shape: (batch_size, sequence_length)
+    :return: Perplexity score for the sequence.
+    """
+
+    # Flatten the logits and labels to calculate loss across all tokens
+    loss_fct = torch.nn.CrossEntropyLoss(reduction='none')
+    
+    # Compute the loss. The view method reshapes the tensors for cross-entropy calculation.
+    loss = loss_fct(logits.view(-1, logits.size(-1)), labels.view(-1))
+    
+    # Calculate mean of the loss
+    mean_loss = torch.mean(loss)
+
+    # Perplexity is the exponentiation of the mean loss
+    perplexity = torch.exp(mean_loss)
+
+    return perplexity
+
+def get_logits_and_labels(example_text, model, tokenizer):
+    # Compute logits and labels for perplexity
+    input_ids = tokenizer(example_text, return_tensors="pt", truncation=True).input_ids.cuda()
+    with torch.no_grad():
+        outputs = model(input_ids, labels=input_ids)
+    logits = outputs.logits
+
+    # Shift the labels to the right and compute perplexity
+    shifted_labels = input_ids[..., 1:].contiguous()
+    return logits, shifted_labels 
 
 class FunctionCallingMetric:
     def __init__(self, embedder_id="sentence-transformers/bert-base-nli-mean-tokens"):
@@ -29,6 +64,7 @@ class FunctionCallingMetric:
         return 1 - cosine(embedding1, embedding2)
 
     def run(self, generated_json, expected_json):
+        # try:
         def compare_json(g_json, e_json, key_similarity_scores, value_similarity_scores):
             for e_key, e_value in e_json.items():
                 # Check for exact key match or find the most similar key
@@ -60,3 +96,6 @@ class FunctionCallingMetric:
         # Combine scores from keys and values as needed, for example, by averaging
         combined_score = sum(key_similarity_scores + value_similarity_scores) / (len(key_similarity_scores) + len(value_similarity_scores))
         return combined_score
+        # except Exception as e:
+        #     print(f"Error during function calling metric evaluation: {e}")
+        #     return 0
