@@ -77,7 +77,7 @@ def parse_prompt_back_to_data(prompt, instruction):
 
     return data
 
-def json_arguments_from_prompt(data_text, model, tokenizer, instruction):
+def json_arguments_from_prompt(data_text, model, tokenizer, instruction, wandb_config=None):
     inp, target = data_text.split("[/INST]")
     prompt = inp + "[/INST]"
     input_ids = tokenizer(prompt, return_tensors="pt", truncation=True).input_ids.cuda()
@@ -85,6 +85,9 @@ def json_arguments_from_prompt(data_text, model, tokenizer, instruction):
 
     expected_str = data_text
     generated_str = tokenizer.batch_decode(outputs.detach().cpu().numpy())[0]
+
+    if "wandb_object" in wandb_config and "idx" in wandb_config:
+        wandb_config["wandb_object"].log({"idx": wandb_config["idx"], "expected_str": expected_str, "generated_str": generated_str})
 
     expected_data = parse_prompt_back_to_data(expected_str, instruction)
     generated_data = parse_prompt_back_to_data(generated_str, instruction)
