@@ -1,7 +1,9 @@
 .venv
 .vscode
-*/.ipynb_checkpoints/*
-*/wandb/*
+**/.ipynb_checkpoints
+**/wandb
+**/__pycache__
+**/.pytest_cache
 
 /llama-7-int4-fc/*
 production_data.json
