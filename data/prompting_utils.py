@@ -118,7 +118,7 @@ def json_arguments_from_prompt(data_text, model, tokenizer, instruction, wandb_c
     generated_arguments = json.loads(generated_data["target"]["chatgptMessage"]["function_call"]["arguments"])
     expected_arguments = json.loads(expected_data["target"]["chatgptMessage"]["function_call"]["arguments"])
 
-    return generated_arguments, expected_arguments
+    return generated_arguments, expected_arguments, {"expected_str": expected_str, "generated_str": generated_str}
 
 def build_prompt(instance, instruction = None):
     """
