@@ -2,6 +2,7 @@ import torch
 import json
 import re
 from gaitor_function_calling.evaluation.evaluation_utils import asd
+from wandb.sdk.data_types.trace_tree import Trace
 
 function_calling_tokens = {
     "FUNCTIONS": {
@@ -77,17 +78,35 @@ def parse_prompt_back_to_data(prompt, instruction):
 
     return data
 
-def json_arguments_from_prompt(data_text, model, tokenizer, instruction, wandb_config=None):
+def json_arguments_from_prompt(data_text, model, tokenizer, instruction, wandb_config=False):
     inp, target = data_text.split("[/INST]")
     prompt = inp + "[/INST]"
     input_ids = tokenizer(prompt, return_tensors="pt", truncation=True).input_ids.cuda()
+    print("pre output generate")
     outputs = model.generate(input_ids=input_ids, do_sample=True, top_p=0.9, temperature=0.9)
+    print("post output generate")
 
     expected_str = data_text
     generated_str = tokenizer.batch_decode(outputs.detach().cpu().numpy())[0]
 
-    if "wandb_object" in wandb_config and "idx" in wandb_config:
-        wandb_config["wandb_object"].log({"idx": wandb_config["idx"], "expected_str": expected_str, "generated_str": generated_str})
+    if wandb_config:
+        current_idx = wandb_config["idx"]
+        current_epoch = wandb_config["epoch"]
+        root_span = Trace(
+            name=f"Epoch: {current_epoch} test {current_idx} sample",
+            kind="llm",  # kind can be "llm", "chain", "agent" or "tool"
+            status_code="success",
+            status_message="successfully generated text",
+            metadata={
+                "epoch": current_epoch,
+                "test_idx": current_idx,
+            },
+            inputs={"expected_str": expected_str},
+            outputs={"generated_str": generated_str},
+        )
+        root_span.log(name="fc_samples")
+        print(f"saved sample {current_idx}")
+        
 
     expected_data = parse_prompt_back_to_data(expected_str, instruction)
     generated_data = parse_prompt_back_to_data(generated_str, instruction)
