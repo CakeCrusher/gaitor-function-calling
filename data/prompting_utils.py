@@ -128,9 +128,9 @@ def build_prompt(instance, instruction = None):
     :param function_calling_tokens: A dictionary containing the start and end tokens for different function call elements.
     :return: A string representing the constructed prompt.
     """
-    input_message = instance['input'][0]['chatgptMessage']['content']
+    input_message = instance['input'][-1]['chatgptMessage']['content']
     target_message = instance['target']['chatgptMessage']
-    functions = instance['input'][0]['functions']
+    functions = instance['input'][-1]['functions']
 
     # Extracting function details as is
     functions_str = json.dumps(functions)
