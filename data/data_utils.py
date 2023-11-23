@@ -5,6 +5,8 @@ from gaitor_function_calling.data.prompting_utils import INSTRUCTION, function_c
 cwd = os.getcwd()
 data_dir = os.path.join(cwd, 'data')
 
+
+
 class DataAbstractor():
     def __init__(self, path_or_name, identifier=None):
         self.identifier = identifier
@@ -76,19 +78,57 @@ class DataAbstractor():
         print(f"Train data size: {len(train_data)}\nTest data size: {len(test_data)}")
         return train_data, test_data
 
-    def save(self, raw, train, test):
+    def save(self, raw = None, train = None, test = None):
+        if not raw and not train and not test:
+            print("No data to save")
+            return 0
+        
         if not os.path.exists(self.paths['train_dir']):
             os.makedirs(self.paths['train_dir'])
+
+        if raw:            
+            with open(os.path.join(self.paths['train_dir'], "raw.json"), 'w') as f:
+                json.dump(raw, f)
+            print(f"Raw data saved to {os.path.join(self.paths['train_dir'], 'raw.json')}")
+        if train:
+            with open(self.paths['train'], 'w') as f:
+                json.dump(train, f)
+            print(f"Train data saved to {self.paths['train']}")
         
-        with open(os.path.join(self.paths['train_dir'], "raw.json"), 'w') as f:
-            json.dump(raw, f)
-        with open(self.paths['train'], 'w') as f:
-            json.dump(train, f)
-        with open(self.paths['test'], 'w') as f:
-            json.dump(test, f)
+        if test:
+            with open(self.paths['test'], 'w') as f:
+                json.dump(test, f)
+            print(f"Test data saved to {self.paths['test']}")
         
         return 1
     
+def build_data_dpo(data):
+    """
+    Build the data in the following format:
+    {
+        "prompt": [str],
+        "chosen": [str],
+        "rejected": [str],
+    }
+    """
+    modified_data = {"prompt": [], "chosen": [], "rejected": []}
+    for idx, instance in enumerate(data):
+        try:
+            if 0 >= instance["fc_result"] or instance["fc_result"] >= 1:
+                print(f"Skipping {idx} with score {instance['fc_result']}")
+                continue
 
+            divided_expected_prompt = instance["expected_str"].split("[/INST]")
+            prompt = divided_expected_prompt[0] + "[/INST]"
+            expected_output = divided_expected_prompt[1]
+            divided_generated_prompt = instance["generated_str"].split("[/INST]")
+            generated_output = divided_generated_prompt[1]
 
+            modified_data["prompt"].append(prompt)
+            modified_data["chosen"].append(expected_output)
+            modified_data["rejected"].append(generated_output)
+        except:
+            print(f"{idx} Error building prompt")
+    
+    return modified_data
 
