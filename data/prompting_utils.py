@@ -82,9 +82,7 @@ def json_arguments_from_prompt(data_text, model, tokenizer, instruction, wandb_c
     inp, target = data_text.split("[/INST]")
     prompt = inp + "[/INST]"
     input_ids = tokenizer(prompt, return_tensors="pt", truncation=True).input_ids.cuda()
-    print("pre output generate")
     outputs = model.generate(input_ids=input_ids, do_sample=True, top_p=0.9, temperature=0.9)
-    print("post output generate")
 
     expected_str = data_text
     generated_str = tokenizer.batch_decode(outputs.detach().cpu().numpy())[0]
@@ -105,7 +103,6 @@ def json_arguments_from_prompt(data_text, model, tokenizer, instruction, wandb_c
             outputs={"generated_str": generated_str},
         )
         root_span.log(name="fc_samples")
-        print(f"saved sample {current_idx}")
         
 
     expected_data = parse_prompt_back_to_data(expected_str, instruction)
