@@ -112,10 +112,11 @@ def build_data_dpo(data):
     }
     """
     modified_data = {"prompt": [], "chosen": [], "rejected": []}
+    skipped = []
     for idx, instance in enumerate(data):
         try:
             if 0 >= instance["fc_result"] or instance["fc_result"] >= 1:
-                print(f"Skipping {idx} with score {instance['fc_result']}")
+                skipped.append(instance)
                 continue
 
             divided_expected_prompt = instance["expected_str"].split("[/INST]")
@@ -129,6 +130,7 @@ def build_data_dpo(data):
             modified_data["rejected"].append(generated_output)
         except:
             print(f"{idx} Error building prompt")
+    print(f"Skipped {len(skipped)} items")
     
     return modified_data
 
