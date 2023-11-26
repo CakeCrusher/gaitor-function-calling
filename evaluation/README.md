@@ -35,4 +35,5 @@ The current evaluation dataset is limited to only function calling outputs.
 - sbert to compare json strings
 - begin getting evaluation scores
 - execution accuracy and string metrics
-- 
+- [exact metric](https://arxiv.org/pdf/1711.04436.pdf)
+- [spider SQL](https://arxiv.org/pdf/1809.08887.pdf#page=11&zoom=100,403,339)
