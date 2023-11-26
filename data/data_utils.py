@@ -61,12 +61,12 @@ class DataAbstractor():
         except:
             print("No test data found")
 
-    def build_data(self, instruction = None, randomize=False, train_test_split=0.95):
+    def build_data(self, instruction = None, randomize=False, train_test_split=0.95, shots = None):
         data = self.raw_data
         modified_data = []
         for idx, instance in enumerate(data):
             try:
-                prompt = build_prompt(instance, instruction)
+                prompt = build_prompt(instance, instruction, shots)
                 modified_data.append({"text": prompt})
             except:
                 print(f"{idx} Error building prompt")
