@@ -177,3 +177,9 @@ Amazon fba news [/INST] <FUNCTION_CALL_NAME>getSearchNews</FUNCTION_CALL_NAME><F
         prompt = f"<s>[INST] {system_message}\n\n{input_message} [/INST] {target_content}</s>"
 
     return prompt
+
+def n_shot_to_no_shot(prompt):
+    json_data = parse_prompt_back_to_data(prompt, INSTRUCTION)
+    no_shot_prompt = build_prompt(json_data, INSTRUCTION)
+    return no_shot_prompt
+
