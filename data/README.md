@@ -274,9 +274,13 @@ Data used for training and evaluation.
 ]
 ```
 
-## Files
-
-- [development_data.json](development_data.json): Raw collection of OpenPlugin data collected in development.
+## Directory Structure
+- [OpenPlugin](OpenPlugin): raw OpenPlugin datasets.
+- [base](base): OpenPlugin datasets processed down to input and output.
+- [train_test](train_test): Data ready for training.
+- [prompts](prompts): Pairs of expected and generated prompts with the generated prompts evaluation scores.
+- [data_utils.py](data_utils.py): Utilities for using, building, and storing train_test data.
+- [prompting_utils](prompting_utils.py): Utilities for creating and interchangably transforming prompts to strictly formatted json.  
 
 ### Map Plugin Namespaces to Functions
 

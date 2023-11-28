@@ -3,7 +3,7 @@ import json
 import os
 from gaitor_function_calling.data.prompting_utils import INSTRUCTION, function_calling_tokens, build_prompt
 cwd = os.getcwd()
-data_dir = os.path.join(cwd, 'data')
+data_dir = os.path.join(cwd, 'data/train_test')
 
 
 
