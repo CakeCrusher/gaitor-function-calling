@@ -3,7 +3,7 @@ import json
 import os
 from gaitor_function_calling.data.prompting_utils import INSTRUCTION, function_calling_tokens, build_prompt
 cwd = os.getcwd()
-data_dir = os.path.join(cwd, 'data')
+data_dir = os.path.join(cwd, 'data/train_test')
 
 
 
@@ -61,12 +61,12 @@ class DataAbstractor():
         except:
             print("No test data found")
 
-    def build_data(self, instruction = None, randomize=False, train_test_split=0.95):
+    def build_data(self, instruction = None, randomize=False, train_test_split=0.95, shots = None):
         data = self.raw_data
         modified_data = []
         for idx, instance in enumerate(data):
             try:
-                prompt = build_prompt(instance, instruction)
+                prompt = build_prompt(instance, instruction, shots)
                 modified_data.append({"text": prompt})
             except:
                 print(f"{idx} Error building prompt")
@@ -102,7 +102,7 @@ class DataAbstractor():
         
         return 1
     
-def build_data_dpo(data):
+def build_data_dpo(data, randomize=False, train_test_split=0.98, skip_callback = None):
     """
     Build the data in the following format:
     {
@@ -113,9 +113,13 @@ def build_data_dpo(data):
     """
     modified_data = {"prompt": [], "chosen": [], "rejected": []}
     skipped = []
+
+    if randomize:
+        random.shuffle(data)
+
     for idx, instance in enumerate(data):
         try:
-            if 0 >= instance["fc_result"] or instance["fc_result"] >= 1:
+            if skip_callback and skip_callback(instance):
                 skipped.append(instance)
                 continue
 
@@ -131,6 +135,18 @@ def build_data_dpo(data):
         except:
             print(f"{idx} Error building prompt")
     print(f"Skipped {len(skipped)} items")
+
+    split_index = int(len(modified_data["prompt"]) * train_test_split)
+    train_data = {
+        "prompt": modified_data["prompt"][:split_index],
+        "chosen": modified_data["chosen"][:split_index],
+        "rejected": modified_data["rejected"][:split_index],
+    }
+    test_data = {
+        "prompt": modified_data["prompt"][split_index:],
+        "chosen": modified_data["chosen"][split_index:],
+        "rejected": modified_data["rejected"][split_index:],
+    }
     
-    return modified_data
+    return train_data, test_data
 

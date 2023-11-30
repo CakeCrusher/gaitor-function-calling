@@ -27,6 +27,8 @@ The final score \( S \) is the average of these two averages:
 \[ S = \frac{\text{avg\_key\_sim} + \text{avg\_value\_sim}}{2} \]
 
 This heuristic captures the essence of the custom metric, combining structural comparison with semantic similarity for string values. The recursive aspect is represented by the application of the metric to nested dictionaries. The use of sentence similarity \( Sim_s \) reflects the semantic comparison of string values and keys when an exact match is not found.
+## Directory Structure
+- [evaluation_utils.py](evaluation_utils.py): Utilities for evaluation including custom evaluation metric and perplexity.
 
 ## Data
 The current evaluation dataset is limited to only function calling outputs.
