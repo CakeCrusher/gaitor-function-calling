@@ -45,7 +45,7 @@ def parse_prompt_back_to_data(prompt, instruction = None):
     instruction_adjusted_prompt = "<s>" + instruction_adjusted_prompt.split("<s>")[-1]
         
     # Extracting data using regular expressions
-    functions_str = re.search(functions_pattern, instruction_adjusted_prompt).group(1)
+    functions_str = re.search(functions_pattern, instruction_adjusted_prompt, re.DOTALL).group(1)
     
     input_content = re.search(input_pattern, instruction_adjusted_prompt).group(1) 
     if "<</SYS>>" in input_content:
@@ -74,8 +74,8 @@ def parse_prompt_back_to_data(prompt, instruction = None):
 
     # Check if the target has a function call
     if function_calling_tokens['FUNCTION_CALL_NAME']['start'] in instruction_adjusted_prompt:
-        function_call_name = re.search(function_call_name_pattern, instruction_adjusted_prompt).group(1)
-        function_call_arguments = re.search(function_call_arguments_pattern, instruction_adjusted_prompt).group(1)
+        function_call_name = re.search(function_call_name_pattern, instruction_adjusted_prompt, re.DOTALL).group(1)
+        function_call_arguments = re.search(function_call_arguments_pattern, instruction_adjusted_prompt, re.DOTALL).group(1)
         data["target"]["chatgptMessage"]["function_call"] = {
             "name": function_call_name,
             "arguments": function_call_arguments

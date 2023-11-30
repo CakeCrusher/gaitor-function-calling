@@ -35,7 +35,8 @@ class DataAbstractor():
             path = os.path.join(data_dir, self.path_or_name)
         if f"-train-{self.identifier}" in path:
             train_dir = os.path.dirname(path)
-        train_dir = os.path.join(os.path.dirname(path), f"{os.path.basename(path).split('.')[0]}-train-{self.identifier}")
+        else:
+            train_dir = os.path.join(os.path.dirname(path), f"{os.path.basename(path).split('.')[0]}-train-{self.identifier}")
         return {
             "root": os.path.dirname(path),
             "raw": path,

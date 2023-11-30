@@ -1,0 +1,5 @@
+glaive_dataset-only_fc.json filter=lfs diff=lfs merge=lfs -text
+data/train_test/glaive_dataset-only_fc-train-glaive-full_train/* filter=lfs diff=lfs merge=lfs -text
+data/train_test/glaive_dataset-only_fc-train-glaive-full_train/raw.json filter=lfs diff=lfs merge=lfs -text
+data/train_test/glaive_dataset-only_fc-train-glaive-full_train/train.json filter=lfs diff=lfs merge=lfs -text
+data/base/glaive_dataset-only_fc.json filter=lfs diff=lfs merge=lfs -text
