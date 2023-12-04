@@ -92,7 +92,6 @@ def generate_prediction(data_text, model, tokenizer, instruction):
     data_split = data_text.split("[/INST]")
     inp = data_split[:-1]
     inp = "[/INST]".join(inp)
-    target = data_split[-1]
     prompt = inp + "[/INST]"
     input_ids = tokenizer(prompt, return_tensors="pt", truncation=True).input_ids.cuda()
     outputs = model.generate(input_ids=input_ids, do_sample=True, top_p=0.9, temperature=0.9)
