@@ -88,7 +88,7 @@ def parse_prompt_back_to_data(prompt, instruction = None):
 
     return data
 
-def json_arguments_from_prompt(data_text, model, tokenizer, instruction, wandb_config=False):
+def generate_prediction(data_text, model, tokenizer, instruction):
     data_split = data_text.split("[/INST]")
     inp = data_split[:-1]
     inp = "[/INST]".join(inp)
@@ -96,9 +96,12 @@ def json_arguments_from_prompt(data_text, model, tokenizer, instruction, wandb_c
     prompt = inp + "[/INST]"
     input_ids = tokenizer(prompt, return_tensors="pt", truncation=True).input_ids.cuda()
     outputs = model.generate(input_ids=input_ids, do_sample=True, top_p=0.9, temperature=0.9)
+    
+    prediction = tokenizer.batch_decode(outputs.detach().cpu().numpy())[0]
+    
+    return prediction
 
-    expected_str = data_text
-    generated_str = tokenizer.batch_decode(outputs.detach().cpu().numpy())[0]
+def json_arguments_from_prompt(expected_str, generated_str, instruction, wandb_config=False):
 
     if wandb_config:
         current_idx = wandb_config["idx"]
