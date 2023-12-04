@@ -3,12 +3,19 @@ import json
 import os
 from gaitor_function_calling.data.prompting_utils import INSTRUCTION, function_calling_tokens, build_prompt
 cwd = os.getcwd()
-data_dir = os.path.join(cwd, 'data/train_test')
+base_data_dir = 'data/base'
 
 
 
 class DataAbstractor():
     def __init__(self, path_or_name, identifier=None):
+        """
+        path_or_name: str
+            The path to the data file or the name of the data file.
+            Must be in data/base.
+        identifier: str
+            The identifier for the data file. This is used to create the train and test data files.
+        """
         self.identifier = identifier
         self.path_or_name = path_or_name
         self.paths = self.get_path()
@@ -29,14 +36,14 @@ class DataAbstractor():
         return str_to_print
 
     def get_path(self):
-        if data_dir in self.path_or_name:
+        if base_data_dir in self.path_or_name:
             path = self.path_or_name
         else:
-            path = os.path.join(data_dir, self.path_or_name)
+            path = os.path.join(base_data_dir, self.path_or_name)
         if f"-train-{self.identifier}" in path:
             train_dir = os.path.dirname(path)
         else:
-            train_dir = os.path.join(os.path.dirname(path), f"{os.path.basename(path).split('.')[0]}-train-{self.identifier}")
+            train_dir = os.path.join(os.path.dirname(os.path.dirname(path)), "train_test", f"{os.path.basename(path).split('.')[0]}-train-{self.identifier}")
         return {
             "root": os.path.dirname(path),
             "raw": path,
