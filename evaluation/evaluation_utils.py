@@ -40,7 +40,7 @@ def get_logits_and_labels(example_text, model, tokenizer):
     return logits, shifted_labels 
 
 class FunctionCallingMetric:
-    def __init__(self, embedder_id="sentence-transformers/bert-base-nli-mean-tokens"):
+    def __init__(self, embedder_id="sentence-transformers/all-mpnet-base-v2"):
         self.embedding_tokenizer = AutoTokenizer.from_pretrained(embedder_id)
         self.embedding_tokenizer.model_max_length = 512
         self.embedding_model = AutoModel.from_pretrained(embedder_id)
