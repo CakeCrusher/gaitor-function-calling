@@ -1,9 +1,8 @@
 # gaitor-function-calling
-Replicate OpenAI's function-calling model
+- [Reseach Paper: Replicating "Function Calling" on Llama 2](https://drive.google.com/file/d/1diYy1W6bhJa7jjShHL-P9A_d2_dj7ai3/view?usp=sharing)
+- [Research summaries, development, results, and more](https://www.kuoly.com/ctg/5b9b7430-37cf-49d2-a02b-0b86e095d124)
 
 ## Todo
-- [ ] shuffle data for all runs. [related to data/train_test](data/train_test).
-- [ ] remove the BrowserOp openplugin test shot. [related to data/prompting_utils](data/prompting_utils.py).
-- [ ] fix the custom evaluation metric to make it more fault tolerant to provide feedback eve nwhen not perfectly structured.
-  - [ ] align with huggingface datasets [custom metric class](https://huggingface.co/docs/datasets/how_to_metrics#custom-metric-loading-script) to leverage huggingface libraries.
-- [ ] incorporate the [rizerphe/glaive-function-calling-v2-llama](https://huggingface.co/datasets/rizerphe/glaive-function-calling-v2-llama?row=0) dataset into runs.
+- [ ] Resolve run-on generation on SFT.
+- [ ] Train for all "Function Calling" featues.
+- [ ] Train for "isConsequential" and other more novel behaviours.
